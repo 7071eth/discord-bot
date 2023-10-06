@@ -5,9 +5,7 @@ from discord import Intents
 import os
 
 #intents permission
-intents = discord.Intents.default()
-intents.typing = True
-intents.presences = True
+intents = discord.Intents.all()
 
 load_dotenv()
 
@@ -26,5 +24,30 @@ def run_discord_bot():
     @client.event
     async def on_ready():
         print(f'{client.user} is now running')
+
+    @client.event
+    async def on_message(message):
+        if message.author == client.user:
+            return
+        
+    
+
+        print(message)
+        username = str(message.author)
+        user_message = str(message.content)
+        print(user_message)
+        channel = str(message.channel)
+
+        print(f"{username} said: '{user_message} ({channel})")
+
+        try:
+            if user_message[0] == '?':
+                user_message = user_message[1:]
+                await send_message(message, user_message, is_private=False)
+            else:
+                await send_message(message,user_message,is_private=False)
+        except Exception as e:
+            print(e)
+
     
     client.run(TOKEN)
