@@ -1,7 +1,13 @@
 import discord
 import responses
 from dotenv import load_dotenv
+from discord import Intents
 import os
+
+#intents permission
+intents = discord.Intents.default()
+intents.typing = True
+intents.presences = True
 
 load_dotenv()
 
@@ -15,7 +21,7 @@ async def send_message(message,user_message,is_private):
 
 def run_discord_bot():
     TOKEN = os.getenv("TOKEN")
-    client = discord.Client()
+    client = discord.Client(intents=intents)
 
     @client.event
     async def on_ready():
