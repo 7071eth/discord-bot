@@ -1,20 +1,27 @@
 import requests
-
+import discord
 def handle_response(message) -> str:
 
     p_message = message.lower()
 
+    #Hugging face api
     url = f'https://huggingface.co/api/models?search={p_message}&limit=5'
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
-        model_ids =[]
+        titles =[]
+        links=[]
         for x in data:
-            model_id = x['modelId']
-            model_ids.append(model_id)
-        print(model_ids)
-        return str(model_ids)
+            title = x['modelId']
+            link =str(f'https://huggingface.co/{title}')
+            titles.append(title)
+            links.append(link)
+        
+        embed = discord.Embed(color=0xFF5733)
+        for title, link in zip(titles, links):
+            embed.add_field(name=title, value=link, inline=False)
+        return embed
 
     else:
         return "No results found"
